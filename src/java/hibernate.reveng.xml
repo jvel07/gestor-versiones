@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="gestor_versiones"/>
+  <table-filter match-name="aplicacion"/>
+  <table-filter match-name="usuario_tiene_aplicacion"/>
+  <table-filter match-name="usuario"/>
+  <table-filter match-name="perfil"/>
+  <table-filter match-name="novedad_actualizacion_app"/>
+  <table-filter match-name="archivo_configuracion"/>
+</hibernate-reverse-engineering>

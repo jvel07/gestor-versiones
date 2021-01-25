@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 25, 2014 12:27:36 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="ec.fe.gv.modelo.Perfil" table="perfil" catalog="gestor_versiones">
+        <id name="pkIdPerfil" type="string">
+            <column name="pk_idPerfil" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="descripcionPerfil" type="string">
+            <column name="descripcionPerfil" length="60" not-null="true" />
+        </property>
+        <set name="usuarios" table="usuario" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="fk_usuario_perfil" length="20" not-null="true" />
+            </key>
+            <one-to-many class="ec.fe.gv.modelo.Usuario" />
+        </set>
+    </class>
+</hibernate-mapping>

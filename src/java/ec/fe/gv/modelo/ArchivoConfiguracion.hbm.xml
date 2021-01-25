@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 25, 2014 12:27:36 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="ec.fe.gv.modelo.ArchivoConfiguracion" table="archivo_configuracion" catalog="gestor_versiones">
+        <id name="pkIdArchivoConfiguracion" type="java.lang.Integer">
+            <column name="pk_idArchivoConfiguracion" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="aplicacion" class="ec.fe.gv.modelo.Aplicacion" fetch="select">
+            <column name="fk_archivoConfig_aplicacion" not-null="true" />
+        </many-to-one>
+        <property name="nombreArchivo" type="string">
+            <column name="nombreArchivo" length="45" not-null="true" unique="true" />
+        </property>
+        <property name="descripcionArchivo" type="string">
+            <column name="descripcionArchivo" length="45" />
+        </property>
+        <property name="directorioArchivo" type="string">
+            <column name="directorioArchivo" length="200" not-null="true" unique="true" />
+        </property>
+        <set name="novedadActualizacionApps" table="novedad_actualizacion_app" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="fk_novedadActu_ArchConfig" not-null="true" />
+            </key>
+            <one-to-many class="ec.fe.gv.modelo.NovedadActualizacionApp" />
+        </set>
+    </class>
+</hibernate-mapping>

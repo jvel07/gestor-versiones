@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 25, 2014 12:27:36 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="ec.fe.gv.modelo.NovedadActualizacionApp" table="novedad_actualizacion_app" catalog="gestor_versiones">
+        <id name="pkIdNovedadActualizacionApp" type="java.lang.Integer">
+            <column name="pk_idNovedadActualizacionApp" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="archivoConfiguracion" class="ec.fe.gv.modelo.ArchivoConfiguracion" fetch="select">
+            <column name="fk_novedadActu_ArchConfig" not-null="true" />
+        </many-to-one>
+        <property name="fechaActualizacionAplicacion" type="timestamp">
+            <column name="fechaActualizacionAplicacion" length="19" not-null="true" />
+        </property>
+        <property name="descripcionNovedadActualizacion" type="string">
+            <column name="descripcionNovedadActualizacion" length="150" not-null="true" />
+        </property>
+        <property name="descripcionDosNovedad" type="string">
+            <column name="descripcionDosNovedad" length="100" />
+        </property>
+        <property name="usuarioRegActualizacion" type="string">
+            <column name="usuarioRegActualizacion" length="10" />
+        </property>
+    </class>
+</hibernate-mapping>

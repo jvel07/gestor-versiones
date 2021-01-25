@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 25, 2014 12:27:36 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="ec.fe.gv.modelo.Usuario" table="usuario" catalog="gestor_versiones">
+        <id name="pkIdUsuario" type="string">
+            <column name="pk_idUsuario" length="10" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="perfil" class="ec.fe.gv.modelo.Perfil" fetch="select">
+            <column name="fk_usuario_perfil" length="20" not-null="true" />
+        </many-to-one>
+        <property name="nombreUsuario" type="string">
+            <column name="nombreUsuario" length="20" not-null="true" />
+        </property>
+        <property name="apellidoUsuario" type="string">
+            <column name="apellidoUsuario" length="20" not-null="true" />
+        </property>
+        <property name="contrasena" type="string">
+            <column name="contrasena" length="32" not-null="true" />
+        </property>
+        <set name="usuarioTieneAplicacions" table="usuario_tiene_aplicacion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="fk_usuario_tiene_aplicacion_usuario" length="10" not-null="true" />
+            </key>
+            <one-to-many class="ec.fe.gv.modelo.UsuarioTieneAplicacion" />
+        </set>
+    </class>
+</hibernate-mapping>

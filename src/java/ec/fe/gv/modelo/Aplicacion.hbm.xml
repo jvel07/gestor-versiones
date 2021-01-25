@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 25, 2014 12:27:36 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="ec.fe.gv.modelo.Aplicacion" table="aplicacion" catalog="gestor_versiones">
+        <id name="pkIdAplicacion" type="java.lang.Integer">
+            <column name="pk_idAplicacion" />
+            <generator class="identity" />
+        </id>
+        <property name="nombreAplicacion" type="string">
+            <column name="nombreAplicacion" length="45" not-null="true" unique="true" />
+        </property>
+        <property name="descripcionAplicacion" type="string">
+            <column name="descripcionAplicacion" length="45" not-null="true" />
+        </property>
+        <property name="numEjecNoPermitidas" type="java.lang.Integer">
+            <column name="numEjecNoPermitidas" />
+        </property>
+        <property name="nombreEjecutableApp" type="string">
+            <column name="nombreEjecutableApp" length="20" not-null="true" unique="true" />
+        </property>
+        <set name="usuarioTieneAplicacions" table="usuario_tiene_aplicacion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="fk_usuario_tiene_aplicacion_aplicacion" not-null="true" />
+            </key>
+            <one-to-many class="ec.fe.gv.modelo.UsuarioTieneAplicacion" />
+        </set>
+        <set name="archivoConfiguracions" table="archivo_configuracion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="fk_archivoConfig_aplicacion" not-null="true" />
+            </key>
+            <one-to-many class="ec.fe.gv.modelo.ArchivoConfiguracion" />
+        </set>
+    </class>
+</hibernate-mapping>
