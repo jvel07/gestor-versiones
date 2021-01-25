@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputStylesheet name="./css/all.css"/>
+        <title>Gestor de Versiones - Desarrolladores</title>
+    </h:head>
+
+    <h:body>
+        <div id="wrapper">
+            <div id="header">
+                <div class="header-block" style="font-family: inherit; font-size: 150%">
+                    <h:graphicImage url="/resources/images/logoGV.png" />
+                </div>
+            </div>
+        </div>
+    </h:body>
+
+    <h:body>
+        <div id="conteiner">
+            <div>
+                <p:growl id="msgs1" showDetail="true" />
+                <h:form>  
+                    <p:menubar style="width: 810px; margin-left: 12%">  
+                        <p:submenu label="Aplicaciones" icon="ui-icon-newwin">  
+                            <p:menuitem value="Registro" icon="ui-icon-plus"  
+                                        url="#{appBean.basePath}usuario/normAplicaciones.xhtml"/>  
+                        </p:submenu>  
+
+                        <p:submenu label="Archivos de Configuración" icon="ui-icon-wrench">  
+                            <p:menuitem value="Registro" url="#{appBean.basePath}usuario/normArchivos.xhtml"
+                                        icon="ui-icon-plus"/>  
+                        </p:submenu>  
+
+                        <p:submenu label="Actualizaciones de Aplicaciones" icon="ui-icon-arrowstop-1-s">  
+                            <p:menuitem value="Registro" url="#{appBean.basePath}usuario/normNovedades.xhtml"
+                                        icon="ui-icon-plus"/>  
+                        </p:submenu>  
+
+                        <p:submenu label="Hola, #{loginBean2.usuario.pkIdUsuario}" icon="ui-icon-person">
+                            <p:menuitem value="Cambiar contraseña" icon="ui-icon-locked" 
+                                        oncomplete="PF('cambContrDialog').show()"/>                            
+                            <p:menuitem value="Cerrar Sesión" icon="ui-icon-close" actionListener="#{loginBean2.logOut}"
+                                        oncomplete="handleLoginRequest(xhr, status, args)"/>                            
+                        </p:submenu>
+                        
+                        <p:menuitem value="Inicio" icon="ui-icon-home" url="#{appBean.basePath}menuUsuarioTemplate.xhtml">                          
+                        </p:menuitem>
+                    </p:menubar>  
+                </h:form>
+
+                <h:form id="formCambiarContrasena">      
+                    <p:dialog header="Cambiar Contraseña" widgetVar="cambContrDialog" resizable="false" id="dlgCambContr"  
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">  
+                            <h:outputText value="Contraseña actual" /> 
+                            <p:password id="currentPassword" required="true" label="password" 
+                                        value="#{cambiarContrasenaBean.contrasenaActual}" 
+                                        requiredMessage="Por favor, ingresa la contraseña actual."/>  
+                            <h:outputText value="Nueva contraseña" /> 
+                            <p:password id="password" required="true" label="Nueva contraseña"
+                                        match="password2"
+                                        weakLabel="Débil"
+                                        strongLabel="Fuerte"
+                                        promptLabel="Nivel de Seguridad"
+                                        goodLabel="Regular"
+                                        feedback="true"
+                                        requiredMessage="Por favor, ingresa la contraseña."/>  
+                            <h:outputText value="Confirmar nueva contraseña" /> 
+                            <p:password value="#{cambiarContrasenaBean.contrasena}"
+                                        id="password2" required="true" label="Confirmación de nueva contraseña"
+                                        weakLabel="Débil"
+                                        strongLabel="Fuerte"
+                                        promptLabel="Nivel de Seguridad"
+                                        goodLabel="Regular"
+                                        feedback="true"
+                                        requiredMessage="Por favor, ingresa confirmación de la contraseña."/>  
+
+                            <f:facet name="footer">  
+                                <p:separator/>
+                                <p:commandButton id="cambiarPass" value="Confirmar" update=":msgs1"   icon="ui-icon-check"
+                                                 style="width: 100px; height: 30px; color: #269abc; margin-left: 0%" styleClass="login_button"
+                                                 actionListener="#{cambiarContrasenaBean.btnCambiarContrasena(actionEvent)}"/>  
+                                <p:commandButton id="decline" value="Cancelar" onclick="cambContrDialog.hide()" 
+                                                 styleClass="login_button" style="margin-left: 7%; color: #269abc"
+                                                 type="button" icon="ui-icon-close"/>
+                            </f:facet>  
+                        </h:panelGrid>  
+                    </p:dialog>
+                </h:form>
+            </div>
+
+            <div id="conteiner2" class="center_content">
+                <p:carousel itemStyle="height:250px;width:1118px;" pageLinks="4" autoPlayInterval="3000"   
+                            numVisible="1" effect="easeInStrong" circular="true" style="width: 1000px">  
+
+                    <h:outputLink  value="http://192.168.238.41:8080/client" title="CloudStack Farmaenlace">
+                        <h:graphicImage  value="/resources/images/cs.JPG"/> 
+                    </h:outputLink> 
+
+                    <h:outputLink  value="http://www.farmaenlace.com" title="Farmaenlace">
+                        <h:graphicImage value="/resources/images/fe.JPG"/>  
+                    </h:outputLink>
+
+                    <h:outputLink  value="http://www.vmware.com/" title="VMware">
+                        <h:graphicImage value="/resources/images/VMware_logo_wht_RGB_300dpi.jpg"/>  
+                    </h:outputLink>
+
+                </p:carousel>  
+            </div>
+            <p:separator></p:separator>
+
+            <div id="content" class="" style="vertical-align: auto">
+                <ui:insert name="content"></ui:insert>
+            </div>
+
+            <div id="bottom">
+                <ui:insert name="bottom">José Vicente Egas López, Farmaenlace Cía. Ltda. - &copy; 2014</ui:insert>
+            </div>
+
+            <script type="text/javascript">
+                function handleLoginRequest(xhr, status, args) {
+                    if (args.loggedOut) {
+                        location.href = args.ruta;
+                    }
+                }
+            </script>
+        </div>
+    </h:body>
+</html>

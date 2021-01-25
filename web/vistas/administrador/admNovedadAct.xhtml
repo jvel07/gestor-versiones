@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuAdminTemplate.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />  
+                <h:form>
+                    <p:commandButton id="btnRegistrarNov" update=":formRegistrarNovedad" 
+                                     oncomplete="PF('regNovDialog').show()" 
+                                     icon="ui-icon-circle-plus" title="Registrar" value="Registrar novedad"/>  
+                </h:form>
+
+                <h:form id="formNovedades">  
+                    <p:dataTable id="novedades" var="novedad" value="#{novActualizBean.novedades}"
+                                 paginator="true" rows="10" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink}
+                                 {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15"
+                                 style="border: none; padding-left: auto; padding-right: auto; padding-top: 15px; text-align: center; 
+                                 margin-right: 80px; margin-left: 80px"> 
+                        <f:facet name="header"> Novedades de Actualización de Apps </f:facet> 
+                        
+                        <p:column headerText="Id novedad" style="width:5%">  
+                            <h:outputText value="#{novedad.pkIdNovedadActualizacionApp}" />  
+                        </p:column>  
+
+                        <p:column headerText="Fecha de actualización" style="width:24%">  
+                            <h:outputText value="#{novedad.fechaActualizacionAplicacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Descripción novedad" style="width:24%">  
+                            <h:outputText value="#{novedad.descripcionNovedadActualizacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Versión" style="width:auto">  
+                            <h:outputText value="#{novedad.descripcionDosNovedad}" />  
+                        </p:column>  
+
+                        <p:column headerText="Aplicación relacionada" style="width:auto" 
+                                  filterBy="#{novedad.archivoConfiguracion.aplicacion.nombreAplicacion}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{novedad.archivoConfiguracion.aplicacion.nombreAplicacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Archivo actualizado" style="width:auto"
+                                  filterBy="#{novedad.archivoConfiguracion.nombreArchivo}"
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{novedad.archivoConfiguracion.nombreArchivo}" />  
+                        </p:column>  
+                        
+                        <p:column headerText="Usuario que registró/actualizó" style="width:auto"
+                                  filterBy="#{novedad.usuarioRegActualizacion}"
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{novedad.usuarioRegActualizacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Acciones" style="width:10%">  
+                            <p:commandButton id="btnActualizarNov" update=":formActualizarNovedad" oncomplete="PF('actNovDialog').show()" 
+                                             icon="ui-icon-pencil" title="Actualizar">  
+                                <f:setPropertyActionListener value="#{novedad}" target="#{novActualizBean.novedadSeleccionada}" />  
+                            </p:commandButton>  
+
+                            <p:commandButton id="btnEliminarNov" update=":formEliminarNovedad" oncomplete="PF('elimNovedadDialog').show()" 
+                                             icon="ui-icon-trash" title="Eliminar">  
+                                <f:setPropertyActionListener value="#{novedad}" target="#{novActualizBean.novedadSeleccionada}" />  
+                            </p:commandButton>  
+                        </p:column>  
+
+                    </p:dataTable>  
+                </h:form>
+
+                <h:form id="formRegistrarNovedad">
+                    <p:dialog header="Registrar novedad" widgetVar="regNovDialog" resizable="false" id="regNovDlg"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+
+                            <h:outputText value="Fecha de actualización" />  
+                            <p:calendar value="#{novActualizBean.novedadSeleccionada.fechaActualizacionAplicacion}" 
+                                        pattern="yyyy-MM-dd HH:mm"
+                                        required="true" effect="slide"
+                                        requiredMessage="Fecha de actualización requerida!"/>  
+
+                            <h:outputText value="Descripción novedad" />  
+                            <p:inputTextarea  value="#{novActualizBean.novedadSeleccionada.descripcionNovedadActualizacion}" 
+                                         required="true" rows="4" cols="20"
+                                         requiredMessage="Se requiere la primera descripción"/>  
+
+                            <h:outputText value="Versión" />  
+                            <p:spinner value="#{novActualizBean.novedadSeleccionada.descripcionDosNovedad}" 
+                                       style="width: -15%" stepFactor="0.5"/> 
+
+                            <h:outputText value="Archivo actualizado" />  
+                            <p:selectOneMenu value="#{novActualizBean.novedadSeleccionada.archivoConfiguracion.pkIdArchivoConfiguracion}" 
+                                             effect="fold"
+                                             required="true"
+                                             requiredMessage="Archivo relacionado requerido!">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{archivoConfiguracionBean.seleccionarUnArchivo}" />  
+                            </p:selectOneMenu>  
+
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="confirm2" value="Aceptar" update=":formNovedades, :msgs" 
+                                                 oncomplete="regNovDialog.hide()" 
+                                                 actionListener="#{novActualizBean.btnCrearAplicacion(actionEvent)}" 
+                                                 icon="ui-icon-check"/> 
+                                <p:commandButton id="btnCancelRegNov" 
+                                                 oncomplete="PF('regNovDialog').hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/> 
+                            </f:facet>
+
+                        </h:panelGrid>  
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formActualizarNovedad">
+                    <p:dialog header="Actualizar Novedad" widgetVar="actNovDialog" resizable="false" id="actNovDlg"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                            <h:outputText value="Id novedad" />  
+                            <p:inputText value="#{novActualizBean.novedadSeleccionada.pkIdNovedadActualizacionApp}" 
+                                         />  
+
+                            <h:outputText value="Fecha de actualización" />  
+                            <p:calendar value="#{novActualizBean.novedadSeleccionada.fechaActualizacionAplicacion}" 
+                                        pattern="yyyy-MM-dd HH:mm"
+                                        required="true" effect="slide"
+                                        requiredMessage="Fecha de actualización requerida!"
+                                        /> 
+
+                            <h:outputText value="Descripción novedad" />  
+                            <p:inputTextarea  value="#{novActualizBean.novedadSeleccionada.descripcionNovedadActualizacion}" 
+                                         required="true" rows="4" cols="20"
+                                         requiredMessage="Se requiere la primera descripción"/>  
+
+                            <h:outputText value="Versión" />  
+                            <p:spinner value="#{novActualizBean.novedadSeleccionada.descripcionDosNovedad}" 
+                                       style="width: -15%" stepFactor="0.5"/> 
+
+                            <h:outputText value="Archivo actualizado" />  
+                            <p:selectOneMenu value="#{novActualizBean.novedadSeleccionada.archivoConfiguracion.pkIdArchivoConfiguracion}" 
+                                             effect="fold"
+                                             required="true"
+                                             requiredMessage="Archivo relacionado requerido!">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{archivoConfiguracionBean.seleccionarUnArchivo}" />  
+                            </p:selectOneMenu>                 
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfActNov"
+                                                 actionListener="#{novActualizBean.btnActualizarNovedad(actionEvent)}"
+                                                 update=":formNovedades, :msgs" 
+                                                 oncomplete="PF('actNovDialog').hide()" 
+                                                 icon="ui-icon-disk" title="Guardar" value="Guardar"/> 
+                                <p:commandButton id="btnCancelActNov" 
+                                                 oncomplete="PF('actNovDialog').hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/> 
+                            </f:facet>
+
+                        </h:panelGrid>  
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formEliminarNovedad">
+                    <p:confirmDialog id="confirmDialog" 
+                                     message="¿Eliminar novedad con Id: #{novActualizBean.novedadSeleccionada.pkIdNovedadActualizacionApp}?" 
+                                     showEffect="fade" hideEffect="explode"
+                                     header="Eliminar Novedad" severity="alert" widgetVar="elimNovedadDialog">
+                        <h:inputHidden value="#{novActualizBean.novedadSeleccionada.pkIdNovedadActualizacionApp}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":formNovedades, :msgs" 
+                                         oncomplete="elimNovedadDialog.hide()" 
+                                         actionListener="#{novActualizBean.btnEliminarNovedad(actionEvent)}" icon="ui-icon-check"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="elimNovedadDialog.hide()"
+                                         type="button" icon="ui-icon-close"/>
+
+                    </p:confirmDialog>
+                </h:form>
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

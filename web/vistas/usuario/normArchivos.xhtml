@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../menuUsuarioTemplate.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />
+                <h:form>
+                    <p:commandButton id="btnCrearArchivo" update=":formCrearArchivo" value="Registrar Archivo"
+                                     oncomplete="PF('regArchivoDialog').show()"
+                                     icon="ui-icon-circle-plus" title="Registrar"/>                     
+                </h:form>
+
+                <h:form id="formArchivos">  
+                    <p:dataTable id="archivos" var="archivoConfiguracion" value="#{archivoConfiguracionBean.archivosConfigPorUsuario}"
+                                 style="border: none; padding-left: auto; padding-right: auto; padding-top: 15px; 
+                                 margin-right: 80px; margin-left: 80px; text-align: center; font-size:13px"
+                                 paginator="true"
+                                 rows="10" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+                        <f:facet name="header"> Archivos de configuración </f:facet> 
+
+                        <p:column headerText="Id archivo" style="width:5%">  
+                            <h:outputText value="#{archivoConfiguracion.pkIdArchivoConfiguracion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Nombre del archivo" style="width:auto"
+                                  filterBy="#{archivoConfiguracion.nombreArchivo}"
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{archivoConfiguracion.nombreArchivo}" />  
+                        </p:column>  
+
+                        <p:column headerText="Descripción del archivo" style="width:auto">  
+                            <h:outputText value="#{archivoConfiguracion.descripcionArchivo}" />  
+                        </p:column>  
+
+                        <p:column headerText="Directorio de ubicación" style="width:24%">  
+                            <h:outputText value="#{archivoConfiguracion.directorioArchivo}" />  
+                        </p:column>  
+
+                        <p:column headerText="Aplicación relacionada" style="width:auto"
+                                  filterBy="#{archivoConfiguracion.aplicacion.nombreAplicacion}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{archivoConfiguracion.aplicacion.nombreAplicacion }" />  
+                        </p:column>  
+
+                        <p:column headerText="Usuario a cargo" style="width:auto">  
+                            <h:outputText value="#{loginBean2.usuario.pkIdUsuario}" />  
+                        </p:column>     
+
+                        <p:column headerText="Acciones" style="width:4%">  
+                            <p:commandButton id="btnActualizarArchivo" update=":formActualizarArchivo" 
+                                             oncomplete="PF('actArchivoDialog').show()"
+                                             icon="ui-icon-pencil" title="Actualizar">  
+                                <f:setPropertyActionListener value="#{archivoConfiguracion}" 
+                                                             target="#{archivoConfiguracionBean.archConfigSeleccionado}" />  
+                            </p:commandButton>                            
+
+                        </p:column>  
+
+                    </p:dataTable> 
+                </h:form> 
+
+                <h:form id="formCrearArchivo"> 
+                    <p:dialog header="Registrar Archivo" widgetVar="regArchivoDialog" resizable="false" id="dlgRegArchivo"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                            
+
+                            <h:outputText value="Nombre del archivo*" />  
+                            <p:inputText  value="#{archivoConfiguracionBean.archConfigSeleccionado.nombreArchivo}"
+                                          required="true" requiredMessage="Ingresa el nombre del archivo!">  
+
+                            </p:inputText>
+
+                            <h:outputText value="Descripción del archivo*" />  
+                            <p:inputText value="#{archivoConfiguracionBean.archConfigSeleccionado.descripcionArchivo}"
+                                         required="true"/>  
+
+                            <h:outputText value="Directorio de ubicación*" />  
+                            <p:inputText value="#{archivoConfiguracionBean.archConfigSeleccionado.directorioArchivo}"
+                                         required="true"/>  
+
+                            <h:outputText value="Aplicación relacionada*" />  
+                            <p:selectOneMenu value="#{archivoConfiguracionBean.archConfigSeleccionado.aplicacion.pkIdAplicacion}" 
+                                             effect="fold">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{aplicacionBean.seleccionarAppSegunUs}" />  
+                            </p:selectOneMenu> 
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmRegArc" update=":formArchivos, :msgs" 
+                                                 icon="ui-icon-disk" 
+                                                 actionListener="#{archivoConfiguracionBean.btnCrearArchivo(actionEvent)}"
+                                                 onclick="regArchivoDialog.hide()"
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelRegArc" oncomplete="regArchivoDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formActualizarArchivo"> 
+                    <p:dialog header="Actualizar archivo: #{archivoConfiguracionBean.archConfigSeleccionado.nombreArchivo}" 
+                              widgetVar="actArchivoDialog" resizable="false" id="dlgActArchivo"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                         
+
+
+                            <h:outputText value="Nombre del archivo" />  
+                            <p:inputText value="#{archivoConfiguracionBean.archConfigSeleccionado.nombreArchivo}"
+                                         required="true"/>  
+
+                            <h:outputText value="Descripción del archivo" />  
+                            <p:inputText value="#{archivoConfiguracionBean.archConfigSeleccionado.descripcionArchivo}"
+                                         required="true"/>  
+
+                            <h:outputText value="Directorio de ubicación" />  
+                            <p:inputText value="#{archivoConfiguracionBean.archConfigSeleccionado.directorioArchivo}"
+                                         required="true"/>  
+
+                            <h:outputText value="Aplicación relacionada*" />  
+                            <p:selectOneMenu value="#{archivoConfiguracionBean.archConfigSeleccionado.aplicacion.pkIdAplicacion}" 
+                                             effect="fold">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{aplicacionBean.seleccionarAppSegunUs}" />  
+                            </p:selectOneMenu> 
+
+                            <h:inputHidden value="#{archivoConfiguracionBean.archConfigSeleccionado.pkIdArchivoConfiguracion}"/> 
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmActArc" update=":formArchivos, :msgs" 
+                                                 actionListener="#{archivoConfiguracionBean.btnActualizarArchivo(actionEvent)}"
+                                                 oncomplete="PF('actArchivoDialog').hide()"
+                                                 icon="ui-icon-disk" 
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelActArc" oncomplete="actArchivoDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

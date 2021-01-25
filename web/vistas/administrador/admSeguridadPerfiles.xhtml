@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+        <ui:composition template="./../menuAdminTemplate.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />
+                <h:form>
+                    <p:commandButton id="btnCrearPerfil" update=":formCrearPerfil" value="Registrar Perfil"
+                                     oncomplete="PF('regPerfilDialog').show()"
+                                     icon="ui-icon-circle-plus" title="Registrar"/>  
+                </h:form>
+
+                <h:form id="formPerfiles">  
+                    <p:dataTable id="perfiles" var="perfil" value="#{perfilBean.perfiles}"
+                                 style="border: none; padding-left: auto; padding-right: auto; padding-top: 15px; 
+                                 margin-right: 170px; margin-left: 170px; text-align: center; font-size:13px"
+                                 paginator="true"
+                                 rows="5" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 >                                  
+                        <f:facet name="header"> Perfiles de Usuario </f:facet> 
+
+                        <p:column headerText="Id Perfil" style="width:20%">  
+                            <h:outputText value="#{perfil.pkIdPerfil}" />  
+                        </p:column>  
+
+                        <p:column headerText="Descripción" style="width:20%">  
+                            <h:outputText value="#{perfil.descripcionPerfil}" />  
+                        </p:column>                          
+
+                        <p:column headerText="Acciones" style="width:5%">  
+                            <p:commandButton id="btnActualizarPerfil" update=":formActualizarPerfil" 
+                                             oncomplete="PF('actPerfilDialog').show()"
+                                             icon="ui-icon-pencil" title="Actualizar">  
+                                <f:setPropertyActionListener value="#{perfil}" target="#{perfilBean.perfilSeleccionado}" />  
+                            </p:commandButton>  
+            
+                            <p:commandButton id="btnEliminarUsuario" update=":formEliminarPerfil" 
+                                             oncomplete="elimPerfilDialog.show()"
+                                             icon="ui-icon-trash" title="Eliminar">  
+                                <f:setPropertyActionListener value="#{perfil}" target="#{perfilBean.perfilSeleccionado}" />  
+                            </p:commandButton> 
+
+                        </p:column>  
+
+                    </p:dataTable> 
+                </h:form> 
+
+                <h:form id="formCrearPerfil"> 
+                    <p:dialog header="Registrar Perfil" widgetVar="regPerfilDialog" resizable="false" id="dlgRegPerfil"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                            <h:outputText value="Id Perfil" />  
+                            <p:inputText value="#{perfilBean.perfilSeleccionado.pkIdPerfil}"/>  
+
+                            <h:outputText value="Descripción del Perfil"/>  
+                            <p:inputText value="#{perfilBean.perfilSeleccionado.descripcionPerfil}" />   
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmRegPf" update=":formPerfiles, :msgs" 
+                                                 icon="ui-icon-disk" 
+                                                 actionListener="#{perfilBean.btnCrearPerfil(actionEvent)}"   
+                                                 oncomplete="PF('regPerfilDialog').hide()"
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelRegPf" oncomplete="regPerfilDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formActualizarPerfil"> 
+                    <p:dialog header="Actualizar Perfil" widgetVar="actPerfilDialog" resizable="false" id="dlgActPerfil"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                            <h:outputText value="Id Perfil" />  
+                            <p:inputText value="#{perfilBean.perfilSeleccionado.pkIdPerfil}"/>  
+
+                            <h:outputText value="Descripción del Perfil"/>  
+                            <p:inputText value="#{perfilBean.perfilSeleccionado.descripcionPerfil}" />  
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmActPf" update=":formPerfiles, :msgs" 
+                                                 actionListener="#{perfilBean.btnActualizarPerfil(actionEvent)}"
+                                                 oncomplete="PF('actPerfilDialog').hide()"
+                                                 icon="ui-icon-disk" 
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelActPf" oncomplete="actPerfilDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+                <h:form id="formEliminarPerfil">      
+
+                    <p:confirmDialog id="confirmDialogPf" message="¿Eliminar el perfil #{perfilBean.perfilSeleccionado.descripcionPerfil}?" showEffect="fade" hideEffect="explode"
+                                     header="Eliminar Perfil" severity="alert" widgetVar="elimPerfilDialog">
+                        <h:inputHidden value="#{perfilBean.perfilSeleccionado.pkIdPerfil}"/>
+                        <p:commandButton id="confirmEPf" value="Aceptar" update=":formPerfiles, :msgs" 
+                                         oncomplete="elimPerfilDialog.hide()" 
+                                         actionListener="#{perfilBean.btnEliminarPerfil(actionEvent)}" icon="ui-icon-check"/>
+                        <p:commandButton id="declineEPf" value="Cancelar" onclick="elimPerfilDialog.hide()"
+                                         type="button" icon="ui-icon-close"/>
+
+                    </p:confirmDialog>
+                </h:form>
+
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

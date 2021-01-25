@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+        <ui:composition template="./../menuAdminTemplate.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />
+                <h:form>
+                    <p:commandButton id="btnCrearAplicacion" update=":formCrearAplicacion" value="Registrar aplicación"
+                                     oncomplete="PF('regAplicacionDialog').show()"
+                                     icon="ui-icon-circle-plus" title="Registrar"/>  
+                </h:form>
+
+                <h:form id="formAplicaciones">  
+                    <p:dataTable id="aplicaciones" var="aplicacion" value="#{aplicacionBean.aplicaciones}"
+                                 paginator="true" rows="5" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15" 
+                                 style="border: none; padding-left: 30px; padding-right: 30px; padding-top: 15px; 
+                                 margin-right: 80px; margin-left: 80px; text-align: center;"> 
+                        <f:facet name="header"> Aplicaciones </f:facet> 
+
+                        <p:column headerText="Id Aplicación" style="width:15%">  
+                            <h:outputText value="#{aplicacion.pkIdAplicacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Nombre de la aplicación" style="width:24%"
+                                  filterBy="#{aplicacion.nombreAplicacion}"  
+                                  filterMatchMode="contains"> 
+                            <h:outputText value="#{aplicacion.nombreAplicacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Descripción de aplicación" style="width:24%">  
+                            <h:outputText value="#{aplicacion.descripcionAplicacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Nombre del ejecutable" style="width:24%"
+                                  filterBy="#{aplicacion.nombreEjecutableApp}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{aplicacion.nombreEjecutableApp}" />  
+                        </p:column>     
+
+                        <p:column headerText="Acciones" style="width:10%">  
+                            <p:commandButton id="btnActualizarAplicacion" update=":formActualizarAplicacion" 
+                                             oncomplete="PF('actAplicacionDialog').show()"
+                                             icon="ui-icon-pencil" title="Actualizar">  
+                                <f:setPropertyActionListener value="#{aplicacion}" 
+                                                             target="#{aplicacionBean.aplicacionSeleccionada}" />  
+                            </p:commandButton>  
+
+                            <p:commandButton id="btnEliminarAplicacion" update=":formEliminarAplicacion" 
+                                             oncomplete="elimAplicacionDialog.show()"
+                                             icon="ui-icon-trash" title="Eliminar">  
+                                <f:setPropertyActionListener value="#{aplicacion}" 
+                                                             target="#{aplicacionBean.aplicacionSeleccionada}" />  
+                            </p:commandButton> 
+
+                        </p:column>  
+
+                    </p:dataTable> 
+                </h:form> 
+
+                <h:form id="formCrearAplicacion"> 
+                    <p:dialog header="Registrar Aplicación" widgetVar="regAplicacionDialog" resizable="false" id="dlgRegAplicacion"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                           
+
+                            <p:outputLabel value="Nombre de la aplicación *" />  
+                            <p:inputText value="#{aplicacionBean.aplicacionSeleccionada.nombreAplicacion}"
+                                         required="true"
+                                         requiredMessage="Se requiere el nombre!"/>  
+
+
+                            <h:outputText value="Descripción de aplicación" />  
+                            <p:inputTextarea value="#{aplicacionBean.aplicacionSeleccionada.descripcionAplicacion}"
+                                             rows="2" cols="20"
+                                             required="true"
+                                             requiredMessage="Se requiere la descripción!"/>  
+
+                            <h:outputText value="Nombre del ejecutable *" />  
+                            <p:inputText value="#{aplicacionBean.aplicacionSeleccionada.nombreEjecutableApp}"
+                                         required="true"
+                                         requiredMessage="Se requiere el nombre del ejecutable!"/>  
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmRegApp" update=":formAplicaciones, :msgs" 
+                                                 icon="ui-icon-disk" 
+                                                 actionListener="#{aplicacionBean.btnCrearAplicacion(actionEvent)}"
+                                                 onclick="regAplicacionDialog.hide()"
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelRegApp" oncomplete="regAplicacionDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formActualizarAplicacion"> 
+                    <p:dialog header="Actualizar Aplicación" widgetVar="actAplicacionDialog" resizable="false" id="dlgActAplicacion"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                         
+
+                            <h:outputText value="Id Aplicación *" />  
+                            <p:inputText value="#{aplicacionBean.aplicacionSeleccionada.pkIdAplicacion}"
+                                         required="true"
+                                         requiredMessage="No modificar el campo del ID"/>  
+
+                            <h:outputText value="Nombre de la aplicación *" />  
+                            <p:inputText value="#{aplicacionBean.aplicacionSeleccionada.nombreAplicacion}"
+                                         required="true"
+                                         requiredMessage="Se requiere el nombre!"/>  
+
+
+                            <h:outputText value="Descripción de aplicación" />  
+                            <p:inputTextarea value="#{aplicacionBean.aplicacionSeleccionada.descripcionAplicacion}"
+                                             rows="2" cols="20"
+                                             required="true"
+                                             requiredMessage="Se requiere la descripción!"/>  
+
+                            <h:outputText value="Nombre del ejecutable *" />  
+                            <p:inputText value="#{aplicacionBean.aplicacionSeleccionada.nombreEjecutableApp}"
+                                         required="true"
+                                         requiredMessage="Se requiere el nombre del ejecutable!"/>  
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmActApp" update=":formAplicaciones, :msgs" 
+                                                 actionListener="#{aplicacionBean.btnActualizarAplicacion(actionEvent)}"
+                                                 oncomplete="PF('actAplicacionDialog').hide()"
+                                                 icon="ui-icon-disk" 
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelActApp" oncomplete="actAplicacionDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+                <h:form id="formEliminarAplicacion">      
+
+                    <p:confirmDialog id="confirmDialog" 
+                                     message="¿Eliminar aplicación: #{aplicacionBean.aplicacionSeleccionada.nombreAplicacion}? 
+                                     Se eliminará todo lo asociado a ésta." 
+                                     showEffect="fade" hideEffect="explode"
+                                     header="Eliminar Aplicación" severity="alert" widgetVar="elimAplicacionDialog">
+                        <h:inputHidden value="#{aplicacionBean.aplicacionSeleccionada.pkIdAplicacion}"/>
+                        <h:inputHidden value="#{usuarioAplicacionBean.usuarioAppSeleccionada.pkIdUsuarioAplicacion}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":formAplicaciones, :msgs" 
+                                         oncomplete="elimAplicacionDialog.hide()" 
+                                         actionListener="#{aplicacionBean.btnEliminarAplicacion(actionEvent)}" 
+                                         icon="ui-icon-check"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="elimAplicacionDialog.hide()"
+                                         type="button" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+                </h:form>
+
+
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

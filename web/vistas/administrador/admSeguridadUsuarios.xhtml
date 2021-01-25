@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+        <ui:composition template="./../menuAdminTemplate.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />
+                <h:form>
+                    <p:commandButton id="btnCrearUsuario" update=":formCrearUsuario" 
+                                     oncomplete="PF('regUsuarioDialog').show()"
+                                     icon="ui-icon-circle-plus" title="Registrar" value="Registrar usuario"/>  
+                </h:form>
+
+                <h:form id="formUsuarios">  
+
+                    <p:dataTable id="usuarios" var="usuario" value="#{usuarioBean.usuarios}"                     
+                                 paginator="true" rows="5" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15"
+                                 style="border: none; padding-left: 30px; padding-right: 30px; margin-right: 140px; margin-left: 140px; 
+                                 padding-top: 15px; text-align: center;">                                                 
+                        <f:facet name="header"> Usuarios del Sistema </f:facet> 
+
+                        <p:column headerText="Id Usuario" style="width:10%"
+                                  filterBy="#{usuario.pkIdUsuario}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.pkIdUsuario}" />  
+                        </p:column>  
+
+                        <p:column headerText="Nombres" style="width:15%"
+                                  filterBy="#{usuario.nombreUsuario}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.nombreUsuario}" />  
+                        </p:column>  
+
+                        <p:column headerText="Apellidos" style="width:15%"
+                                  filterBy="#{usuario.apellidoUsuario}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.apellidoUsuario}" />  
+                        </p:column>  
+
+                        <p:column headerText="Perfil" style="width:10%"
+                                  filterBy="#{usuario.perfil.pkIdPerfil}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.perfil.pkIdPerfil}" />  
+                        </p:column>                         
+
+                        <p:column headerText="Acciones" style="width:10%">  
+                            <p:commandButton id="btnActualizarUsuario" update=":formActualizarUsuario" 
+                                             oncomplete="PF('actUsuarioDialog').show()"
+                                             icon="ui-icon-pencil" title="Actualizar">  
+                                <f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.usuarioSeleccionado}" />  
+                            </p:commandButton>   
+                            <p:commandButton id="btnEliminarUsuario" update=":formEliminarUsuario" 
+                                             oncomplete="elimUsuarioDialog.show()"
+                                             icon="ui-icon-trash" title="Eliminar">  
+                                <f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.usuarioSeleccionado}" />  
+                            </p:commandButton> 
+                        </p:column>  
+
+                    </p:dataTable>                  
+                </h:form> 
+
+                <h:form id="formCrearUsuario"> 
+                    <p:dialog header="Registrar Usuario" widgetVar="regUsuarioDialog" resizable="false" id="dlgRegUsuario"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="5">  
+
+                            <h:outputText value="Id Usuario" />  
+                            <p:inputText id="idUsuario" value="#{usuarioBean.usuarioSeleccionado.pkIdUsuario}"                                         
+                                         required="true" requiredMessage="ID de usuario es requerido!"
+                                         label="Id Usuario">  
+                                <f:validateLength maximum="10"/>
+                            </p:inputText>
+
+
+                            <h:outputText value="Contraseña" />  
+                            <p:password value="#{usuarioBean.usuarioSeleccionado.contrasena}"
+                                        required="true"
+                                        requiredMessage="La contraseña es requerida!"
+                                        weakLabel="Débil"
+                                        strongLabel="Fuerte"
+                                        promptLabel="Nivel de Seguridad"
+                                        goodLabel="Regular"
+                                        feedback="true"/>  
+
+                            <h:outputText value="Confirmar contraseña" />  
+                            <p:password value="#{usuarioBean.contrasenaConfirmacion}"
+                                        required="true"
+                                        requiredMessage="La confirmación de contraseña es requerida!"
+                                        weakLabel="Débil"
+                                        strongLabel="Fuerte"
+                                        promptLabel="Nivel de Seguridad"
+                                        goodLabel="Regular"
+                                        feedback="true"/>  
+
+                            <h:outputText value="Nombre" />  
+                            <p:inputText value="#{usuarioBean.usuarioSeleccionado.nombreUsuario}"
+                                         required="true"
+                                         requiredMessage="El nombre es requerido!"/>  
+
+                            <h:outputText value="Apellido" />  
+                            <p:inputText value="#{usuarioBean.usuarioSeleccionado.apellidoUsuario}"
+                                         required="true"
+                                         requiredMessage="El apellido es requerido!"/>  
+
+                            <h:outputText value="Perfil" />  
+                            <p:selectOneMenu value="#{usuarioBean.usuarioSeleccionado.perfil.pkIdPerfil}" 
+                                             effect="fold" required="true" requiredMessage="Elige un perfil para el usuario!">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{perfilBean.seleccionarUnPerfil}" />  
+                            </p:selectOneMenu>  
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmRegUs" update=":formUsuarios, :msgs" 
+                                                 icon="ui-icon-disk" 
+                                                 actionListener="#{usuarioBean.btnCrearUsuario(actionEvent)}"
+                                                 oncomplete="regUsuarioDialog.hide()"
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelRegUs" oncomplete="regUsuarioDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formActualizarUsuario"> 
+                    <p:dialog header="Actualizar Usuario" widgetVar="actUsuarioDialog" resizable="false" id="dlgActUsuario"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">  
+
+                           <h:outputText value="Id Usuario" />  
+                            <p:inputText id="idUsuario" value="#{usuarioBean.usuarioSeleccionado.pkIdUsuario}"                                         
+                                         required="true" requiredMessage="ID de usuario es requerido!"
+                                         label="Id Usuario">  
+                                <f:validateLength maximum="10"/>
+                            </p:inputText>                           
+
+                            <h:outputText value="Nombre" />  
+                            <p:inputText value="#{usuarioBean.usuarioSeleccionado.nombreUsuario}"
+                                         required="true"
+                                         requiredMessage="El nombre es requerido!"/>  
+
+                            <h:outputText value="Apellido" />  
+                            <p:inputText value="#{usuarioBean.usuarioSeleccionado.apellidoUsuario}"
+                                         required="true"
+                                         requiredMessage="El apellido es requerido!"/>  
+
+                            <h:outputText value="Perfil" />  
+                            <p:selectOneMenu value="#{usuarioBean.usuarioSeleccionado.perfil.pkIdPerfil}" 
+                                             effect="fold" required="true" requiredMessage="Elige un perfil para el usuario!">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{perfilBean.seleccionarUnPerfil}" />  
+                            </p:selectOneMenu> 
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmActUs" update=":formUsuarios, :msgs" 
+                                                 actionListener="#{usuarioBean.btnActualizarUsuario(actionEvent)}"
+                                                 oncomplete="PF('actUsuarioDialog').hide()"
+                                                 icon="ui-icon-disk" 
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelActUs" oncomplete="actUsuarioDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+                <h:form id="formEliminarUsuario">      
+
+                    <p:confirmDialog id="confirmDialog" message="¿Eliminar usuario #{usuarioBean.usuarioSeleccionado.pkIdUsuario}?" showEffect="fade" hideEffect="explode"
+                                     header="Eliminar Usuario" severity="alert" widgetVar="elimUsuarioDialog">
+                        <h:inputHidden value="#{usuarioBean.usuarioSeleccionado.pkIdUsuario}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":formUsuarios, :msgs" 
+                                         oncomplete="elimUsuarioDialog.hide()" 
+                                         actionListener="#{usuarioBean.btnEliminarUsuario(actionEvent)}" icon="ui-icon-check"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="elimUsuarioDialog.hide()"
+                                         type="button" icon="ui-icon-close"/>
+
+                    </p:confirmDialog>
+                </h:form>
+
+
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

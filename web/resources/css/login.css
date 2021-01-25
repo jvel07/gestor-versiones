@@ -1,0 +1,145 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 15, 2014, 10:40:10 AM
+    Author     : Jose07
+*/
+
+body{
+    background-color: #ffffff !important;    
+}
+
+
+.conteiner{
+    width: 0px;
+    margin-left: 53%;
+    margin-right: 0;
+    margin-top: -28%;
+    font-size: 90%;
+
+}
+
+.conteinerTexts{
+    width: 0px;
+    margin-left: 5%;
+    margin-right: 0;
+    margin-top: 0%;
+    font-size: 100%;
+
+}
+
+.farmaenlace{
+    margin-left: 87%;
+    margin-right: 0%;
+    margin-top: 15%;
+    width: 10%;
+
+}
+.logos{
+    margin-left: 10%;
+    margin-right: 60%;
+    margin-top: 3%;
+}
+
+footer p {
+    margin-bottom: 50%;
+    margin-left: 50%;
+    clear: left;
+    font-size: 130%;
+}
+
+.imagen{
+    margin-left: 53%;
+    margin-right: auto;
+    margin-top: 0%;
+
+}
+
+.login_button{
+
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    border-color: #46b8da;
+    background-color: #ffffff;
+    margin-top: 10%;
+    margin-left: 18%;   
+
+
+
+    ////
+    /*    font-family: sans-serif;
+        font-size: 20%;
+        color: #000;
+        background-color: #ffffff;
+        border-color: #46b8da;
+        margin-left: 22%;
+        margin-right: auto;
+        margin-top: 5%;
+        width: 55%;   */
+
+}
+
+.btn {
+    display: inline-block;
+    margin-bottom: 0px;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    border-radius: 4px;
+    -moz-user-select: none;
+}
+
+.btn-lg, .btn-group-lg > .btn {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 6px;
+}
+
+.btn-outline {
+    color: #563D7C;
+    background-color: transparent;
+    border-color: #563D7C;
+}
+
+.btn-outline:hover, .btn-outline:focus, .btn-outline:active {
+    color: #FFF;
+    background-color: #563D7C;
+    border-color: #563D7C;
+}
+
+.contenedor{       
+    margin-top: -65%;
+    margin-left: 50%;
+    margin-right: 40%;              
+}
+
+.ui-state-default .icon-login{
+    //background-image: url(../images/icons/login.png);
+}
+

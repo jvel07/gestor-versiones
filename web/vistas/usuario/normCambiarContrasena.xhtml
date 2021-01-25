@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../menuUsuarioTemplate.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />
+
+                <h:form id="formCambiarContrasena"> 
+                    <h:panelGrid columns="2" cellpadding="5" styleClass="conteiner">  
+
+
+                        <h:outputText value="Contraseña actual" /> 
+                        <p:password style="width: 150px; margin-top: 10%"
+                                    id="currentPassword" required="true" label="password" styleClass="conteinerTexts"
+                                    value="#{cambiarContrasenaBean.contrasenaActual}" 
+                                    requiredMessage="Por favor, ingresa la contraseña actual."/>  
+                        <h:outputText value="Nueva contraseña" /> 
+                        <p:password style="width: 150px; margin-top: 10%"
+                                    id="password" required="true" label="Nueva contraseña" styleClass="conteinerTexts"
+                                    match="password2"
+                                    weakLabel="Débil"
+                                    strongLabel="Fuerte"
+                                    promptLabel="Nivel de Seguridad"
+                                    goodLabel="Regular"
+                                    feedback="true"
+                                    requiredMessage="Por favor, ingresa la contraseña."/>  
+                        <h:outputText value="Confirmar nueva contraseña" /> 
+                        <p:password value="#{cambiarContrasenaBean.contrasena}"   style="width: 150px; margin-top: 10%"
+                                    id="password2" required="true" label="Confirmación de nueva contraseña" styleClass="conteinerTexts"
+                                    weakLabel="Débil"
+                                    strongLabel="Fuerte"
+                                    promptLabel="Nivel de Seguridad"
+                                    goodLabel="Regular"
+                                    feedback="true"
+                                    requiredMessage="Por favor, ingresa confirma la contraseña."/>  
+
+                        <f:facet name="footer">  
+                            <p:commandButton id="cambiarPass" value="Cambiar contraseña" update=":msgs"   
+                                             style="width: 120px; height: 40px; color: #269abc" styleClass="login_button"
+                                             actionListener="#{cambiarContrasenaBean.btnCambiarContrasena(actionEvent)}"
+                                             />  
+                        </f:facet>  
+                    </h:panelGrid>
+                </h:form>  
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

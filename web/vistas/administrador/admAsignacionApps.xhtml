@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"  
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuAdminTemplate.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />
+                <h:form>
+                    <p:commandButton id="btnAsignarAplicacion" update=":formAsignarAplicacion" value="Asignar Aplicación"
+                                     oncomplete="PF('asigAplicacionDialog').show()"
+                                     icon="ui-icon-circle-plus" title="Asignar"/>  
+                </h:form>
+                <h:form id="formUsuariosApps">  
+                    <p:dataTable id="asignacionesApps" var="usuariosApp" value="#{usuarioAplicacionBean.usuariosApps}"
+                                 paginator="true" rows="10" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15"
+                                 style="border: none; padding-left: 30px; padding-right: 30px; 
+                                 margin-right: 100px; margin-left: 100px; padding-top: 15px; text-align: center;"> 
+                        <f:facet name="header"> Usuarios y Aplicaciones </f:facet> 
+                        
+                        <p:column headerText="Id asignación" style="width:2%">  
+                            <h:outputText value="#{usuariosApp.pkIdUsuarioAplicacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Usuario" style="width:7%"
+                                  filterBy="#{usuariosApp.usuario.pkIdUsuario}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuariosApp.usuario.pkIdUsuario}" />  
+                        </p:column>  
+
+                        <p:column headerText="Aplicación" style="width:7%"
+                                  filterBy="#{usuariosApp.aplicacion.nombreAplicacion}"   
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuariosApp.aplicacion.nombreAplicacion}" />  
+                        </p:column>  
+
+                        <p:column headerText="Acciones" style="width:5%">  
+                            <p:commandButton id="btnActualizarAsignacion" update=":formActualizarAsignacion" 
+                                             oncomplete="PF('actAsignacionDialog').show()"
+                                             icon="ui-icon-pencil" title="Actualizar">  
+                                <f:setPropertyActionListener value="#{usuariosApp}" target="#{usuarioAplicacionBean.usuarioAppSeleccionada}" />  
+                            </p:commandButton>  
+                         
+                            <p:commandButton id="btnEliminarAsignacion" update=":formEliminarAsignacion" 
+                                             oncomplete="elimAsignacionDialog.show()"
+                                             icon="ui-icon-trash" title="Eliminar">  
+                                <f:setPropertyActionListener value="#{usuariosApp}" target="#{usuarioAplicacionBean.usuarioAppSeleccionada}" />  
+                            </p:commandButton> 
+
+                        </p:column>  
+
+                    </p:dataTable> 
+                </h:form> 
+
+                <h:form id="formAsignarAplicacion"> 
+                    <p:dialog header="Asignar Aplicación" widgetVar="asigAplicacionDialog" resizable="false" id="dlgAsigAplicacion"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                           
+
+                            <h:outputText value="Usuarios" />  
+                            <p:selectOneMenu value="#{usuarioAplicacionBean.pkIdUsuario}" 
+                                             effect="fold">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{usuarioBean.seleccionarUnUsuario}" />  
+                            </p:selectOneMenu> 
+
+                            <h:outputText value="Aplicaciones" />  
+                            <p:selectOneMenu value="#{usuarioAplicacionBean.pkIdApp}" 
+                                             effect="fold">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{aplicacionBean.seleccionarUnaApp}" />  
+                            </p:selectOneMenu> 
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmAsigApp" update=":formUsuariosApps, :msgs" 
+                                                 icon="ui-icon-disk" 
+                                                 actionListener="#{usuarioAplicacionBean.btnAsignarUsApp(actionEvent)}"
+                                                 onclick="asigAplicacionDialog.hide()"
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelRegApp" oncomplete="asigAplicacionDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+
+                <h:form id="formActualizarAsignacion"> 
+                    <p:dialog header="Actualizar Asignación" widgetVar="actAsignacionDialog" resizable="false" id="dlgActAsignacion"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                         
+
+                            <h:outputText value="Id asignación" />  
+                            <p:inputText value="#{usuarioAplicacionBean.usuarioAppSeleccionada.pkIdUsuarioAplicacion}"
+                                         required="true"/>
+
+                            <h:outputText value="Usuarios" />  
+                            <p:selectOneMenu value="#{usuarioAplicacionBean.usuarioAppSeleccionada.usuario.pkIdUsuario}" 
+                                             effect="fold" editable="true">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{usuarioBean.seleccionarUnUsuario}" />  
+                            </p:selectOneMenu> 
+
+                            <h:outputText value="Aplicaciones" />  
+                            <p:selectOneMenu value="#{usuarioAplicacionBean.usuarioAppSeleccionada.aplicacion.pkIdAplicacion}" 
+                                             effect="fold">  
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />  
+                                <f:selectItems value="#{aplicacionBean.seleccionarUnaApp}" />  
+                            </p:selectOneMenu> 
+
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnConfirmActAsig" update=":formUsuariosApps, :msgs" 
+                                                 actionListener="#{usuarioAplicacionBean.btnActualizarUsApp(actionEvent)}"
+                                                 oncomplete="PF('actAsignacionDialog').hide()"
+                                                 icon="ui-icon-disk" 
+                                                 title="Guardar" value="Guardar"
+                                                 />
+                                <p:commandButton id="btnCancelActAsig" oncomplete="actAsignacionDialog.hide()" 
+                                                 icon="ui-icon-close" title="Cerrar" value="Cerrar"/>
+                            </f:facet>
+                        </h:panelGrid>  
+
+                    </p:dialog>  
+                </h:form>  
+
+                <h:form id="formEliminarAsignacion">      
+
+                    <p:confirmDialog id="confirmDialog" message="¿Eliminar asignación del usuario: #{usuarioAplicacionBean.usuarioAppSeleccionada.usuario.pkIdUsuario}, 
+                                     con la app: #{usuarioAplicacionBean.usuarioAppSeleccionada.aplicacion.nombreAplicacion}?" showEffect="fade" hideEffect="explode"
+                                     header="Eliminar Asignación" severity="alert" widgetVar="elimAsignacionDialog">
+                        <h:inputHidden value="#{usuarioAplicacionBean.usuarioAppSeleccionada.pkIdUsuarioAplicacion}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":formUsuariosApps, :msgs" 
+                                         oncomplete="elimAsignacionDialog.hide()" 
+                                         actionListener="#{usuarioAplicacionBean.btnEliminarUsApp(actionEvent)}" 
+                                         icon="ui-icon-check"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="elimAsignacionDialog.hide()"
+                                         type="button" icon="ui-icon-close"/>
+
+                    </p:confirmDialog>
+                </h:form>
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

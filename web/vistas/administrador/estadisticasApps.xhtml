@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"    
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../menuAdminTemplate.xhtml">
+
+            <ui:define name="content">
+                <p:layoutUnit position="center">   
+
+                    <p:panel header="Reporte Aplicaciones" style="font-size: 12px;">
+
+                        <h:form>
+
+                            <p:commandButton value="Generar" actionListener="#{reportesBean.populateReport()}" update="myTable" />
+
+                            <p:dataTable value="#{reportesBean.reporte1List}" var="report" id="myTable">
+
+
+                                <f:facet name="header">
+                                    Lista de Aplicaciones
+                                </f:facet>
+
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        ID Usuario
+                                    </f:facet>
+                                    <h:outputText value="#{report.fkUsuarioApp}" style="font-size: 12px;"  />                   
+                                </p:column>
+
+
+                                <p:column  >
+                                    <f:facet name="header">
+                                        Nombre Aplicación
+                                    </f:facet>
+                                    <h:outputText value="#{report.nombreApp}" style="font-size: 12px;"  />                   
+                                </p:column>                                
+
+
+                                <p:column  >
+                                    <f:facet name="header">
+                                        Número de ejecuciones no permitidas
+                                    </f:facet>
+                                    <h:outputText value="#{report.ejecNoPerm}" style="font-size: 12px;"  />
+                                </p:column>                              
+
+                            </p:dataTable>
+
+                            <p:toolbarGroup align="center" >
+                                <p:commandButton value="Export To PDF" id="exportToPdfButton" actionListener="#{reportsManagedBean.exportToPdf}" ajax="false" />
+                                <p:spacer width="10"/>
+                            </p:toolbarGroup>
+
+                        </h:form>
+
+
+                    </p:panel>
+
+
+                </p:layoutUnit>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
